@@ -5,7 +5,13 @@ import { YoutubeTranscript } from "youtube-transcript-api";
 import OpenAI from "openai";
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://your-frontend-domain.netlify.app']
+    : ['http://localhost:5173', 'http://localhost:4173'],
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
 app.use(express.json({ limit: "50mb" }));
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
